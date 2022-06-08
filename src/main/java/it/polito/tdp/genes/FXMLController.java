@@ -5,8 +5,12 @@
 package it.polito.tdp.genes;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.genes.db.Coppia;
+import it.polito.tdp.genes.db.GenesDao;
 import it.polito.tdp.genes.model.Genes;
 import it.polito.tdp.genes.model.Model;
 import javafx.event.ActionEvent;
@@ -30,7 +34,7 @@ public class FXMLController {
     private Button btnCreaGrafo; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbGeni"
-    private ComboBox<?> cmbGeni; // Value injected by FXMLLoader
+    private ComboBox<Genes> cmbGeni; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnGeniAdiacenti"
     private Button btnGeniAdiacenti; // Value injected by FXMLLoader
@@ -47,17 +51,39 @@ public class FXMLController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	
+    	txtResult.appendText(model.creaGrafo());
+    	cmbGeni.getItems().clear();
+    	cmbGeni.getItems().addAll(model.getEssenziali());
 
     }
 
     @FXML
     void doGeniAdiacenti(ActionEvent event) {
-
+    	
+    	Genes gene= cmbGeni.getValue();
+    	List<Coppia> vicini= this.model.getAdiacenti(gene);
+    	
+    	txtResult.appendText("\n\nGeni adiacenti a "+this.cmbGeni.getValue()+"\n");
+    	for(Coppia c: vicini) {
+			if(c.getG1().equals(gene)) {
+				txtResult.appendText(c.getG2().getGeneId()+" "+c.getPeso()+"\n");
+			}
+			else if(c.getG2().equals(gene)){
+				txtResult.appendText(c.getG1().getGeneId()+" "+c.getPeso()+"\n");
+				
+				}
+		}
+    	
     	
     }
 
     @FXML
     void doSimula(ActionEvent event) {
+    	
+    	String stampa= this.model.simula(Integer.parseInt(txtIng.getText()), cmbGeni.getValue());
+    	txtResult.clear();
+    	txtResult.setText(stampa);
+    	
 
     }
 
@@ -73,6 +99,7 @@ public class FXMLController {
     }
     
     public void setModel(Model model) {
+    	
     	this.model = model;
     }
     

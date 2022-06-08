@@ -1,10 +1,15 @@
 package it.polito.tdp.genes.model;
 
-public class Genes {
+public class Genes implements Comparable<Genes>{
 	
 	private String geneId;
 	private String essential;
 	private int chromosome;
+	
+	
+	private Double probabilita;
+	
+	
 	
 	public Genes(String geneId, String essential, int chromosome) {
 		super();
@@ -37,6 +42,14 @@ public class Genes {
 		this.chromosome = chromosome;
 	}
 
+	public double getProbabilita() {
+		return probabilita;
+	}
+
+	public void setProbabilita(double probabilita) {
+		this.probabilita = probabilita;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -65,6 +78,12 @@ public class Genes {
 	@Override
 	public String toString() {
 		return this.geneId;
+	}
+
+	@Override
+	public int compareTo(Genes o) {
+		
+		return this.probabilita.compareTo(o.probabilita);
 	}
 
 
